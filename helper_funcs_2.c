@@ -49,7 +49,8 @@ void split_line(char **line, ssize_t read)
  */
 ssize_t get_line_length(char *line)
 {
-	size_t i; ssize_t new_length = 0;
+	size_t i;
+	ssize_t new_length = 0;
 	char current, next;
 
 	for (i = 0; line[i]; i++)
