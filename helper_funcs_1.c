@@ -48,7 +48,7 @@ char *get_pid(void)
 }
 
 /**
- * get_environ_value - gets the value corresponding to an environmental variable.
+ * get_environ_value - gets the value corresponding to an environmental var.
  * @source: environmental variable source to search.
  * @len: environmental variable lenght.
  * Return: the variable and empty string if not found
@@ -100,39 +100,31 @@ void replace_env(char **line, int *last_command)
 			{
 				replace_env = get_pid();
 				k = j + 2;
-			}
-			else if (old_line[j + 1] == '?')
+			} else if (old_line[j + 1] == '?')
 			{
 				replace_env = _itoa(*last_command);
 				k = j + 2;
-			}
-			else if (old_line[j + 1])
+			} else if (old_line[j + 1])
 			{
-				/* extract the variable source to search for */
-				for (k = j + 1; old_line[k] &&
-						old_line[k] != '$' &&
+				for (k = j + 1; old_line[k] && old_line[k] != '$' &&
 						old_line[k] != ' '; k++)
 					;
 				len = k - (j + 1);
 				replace_env = get_environ_value(&old_line[j + 1], len);
-			}
-			new_line = malloc(j + _strlen(replace_env)
-					  + _strlen(&old_line[k]) + 1);
+			} new_line = malloc(j + _strlen(replace_env)
+					+ _strlen(&old_line[k]) + 1);
 			if (!line)
 				return;
 			new_line[0] = '\0';
 			_strncat(new_line, old_line, j);
 			if (replace_env)
 			{
-				_strcat(new_line, replace_env);
-				free(replace_env);
+				_strcat(new_line, replace_env), free(replace_env);
 				replace_env = NULL;
 			}
 			_strcat(new_line, &old_line[k]);
-			free(old_line);
-			*line = new_line;
-			old_line = new_line;
-			j = -1;
+			free(old_line),	*line = new_line;
+			old_line = new_line, j = -1;
 		}
 	}
 }
