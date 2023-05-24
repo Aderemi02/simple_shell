@@ -13,10 +13,8 @@ int exec(char **a1, char **beginning)
 
 	if (comm[0] != '/' && comm[0] != '.')
 	{
-		flag = 1;
-		comm = loc(comm);
+		flag = 1, comm = loc(comm);
 	}
-
 	if (!comm || (access(comm, F_OK) == -1))
 	{
 		if (errno == EACCES)
@@ -39,15 +37,13 @@ int exec(char **a1, char **beginning)
 			execve(comm, a1, environ);
 			if (errno == EACCES)
 				rep = (create_error(a1, 126));
-			freeingenvir();
-			free_arguments(a1, beginning);
+			freeingenvir(), free_arguments(a1, beginning);
 			free_al_lst(global_alias);
 			exit(rep);
 		}
 		else
 		{
-			wait(&init);
-			rep = WEXITSTATUS(init);
+			wait(&init), rep = WEXITSTATUS(init);
 		}
 	}
 		if (flag)

@@ -69,7 +69,7 @@ char *_itoa(int num)
 /**
  * create_error - prints custom error message to stderr
  * @args: arguments array
- * @error: error value
+ * @error_code: error value
  * Return: error
  */
 int create_error(char **args, int error_code)

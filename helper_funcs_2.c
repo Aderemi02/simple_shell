@@ -44,6 +44,7 @@ void split_line(char **line, ssize_t read)
 
 /**
  * get_line_length - gets new length of the splitted line
+ * @line: the string to get its line
  * Return: new length of the line.
  */
 ssize_t get_line_length(char *line)
@@ -54,36 +55,30 @@ ssize_t get_line_length(char *line)
 
 	for (i = 0; line[i]; i++)
 	{
-		current = line[i];
-		next = line[i + 1];
+		current = line[i], next = line[i + 1];
 		if (current == '#')
 		{
 			if (i == 0 || line[i - 1] == ' ')
 			{
-				line[i] = '\0';
-				break;
+				line[i] = '\0', break;
 			}
-		}
-		else if (i != 0)
+		} else if (i != 0)
 		{
 			if (current == ';')
 			{
 				if (next == ';' && line[i - 1] != ' ' && line[i - 1] != ';')
 				{
-					new_length += 2;
-					continue;
+					new_length += 2, continue;
 				}
 				else if (line[i - 1] == ';' && next != ' ')
 				{
-					new_length += 2;
-					continue;
+					new_length += 2, continue;
 				}
 				if (line[i - 1] != ' ')
 					new_length++;
 				if (next != ' ')
 					new_length++;
-			}
-			else
+			} else
 				check_operator(&line[i], &new_length);
 		}
 		else if (current == ';')
@@ -92,10 +87,8 @@ ssize_t get_line_length(char *line)
 				new_length++;
 			if (next != ' ' && next != ';')
 				new_length++;
-		}
-		new_length++;
-	}
-	return (new_length);
+		} new_length++;
+	} return (new_length);
 }
 /**
  * check_operator - checks a line for logical operators like "||" or "&&".

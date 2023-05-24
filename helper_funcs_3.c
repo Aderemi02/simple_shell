@@ -50,14 +50,11 @@ int call_arguments(char **args, char **beginning, int *last_command)
 	{
 		if (_strncmp(args[index], "||", 2) == 0)
 		{
-			free(args[index]);
-			args[index] = NULL;
-			args = replace_alias(args);
+			free(args[index]), args[index] = NULL, args = replace_alias(args);
 			command_return = run_arguments(args, beginning, last_command);
 			if (*last_command != 0)
 			{
-				args = &args[++index];
-				index = 0;
+				args = &args[++index], index = 0;
 			}
 			else
 			{
@@ -68,14 +65,11 @@ int call_arguments(char **args, char **beginning, int *last_command)
 		}
 		else if (_strncmp(args[index], "&&", 2) == 0)
 		{
-			free(args[index]);
-			args[index] = NULL;
-			args = replace_alias(args);
+			free(args[index]), args[index] = NULL, args = replace_alias(args);
 			command_return = run_arguments(args, beginning, last_command);
 			if (*last_command == 0)
 			{
-				args = &args[++index];
-				index = 0;
+				args = &args[++index], index = 0;
 			}
 			else
 			{
