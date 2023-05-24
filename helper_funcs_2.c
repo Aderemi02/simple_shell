@@ -7,9 +7,9 @@
  */
 void split_line(char **line, ssize_t read)
 {
-	char *old_line, *new_line;
-	char prev, current, next;
-	size_t i, j;
+	char *old_line, *new_line, prev, current, next;
+	size_t i, j = 0;
+	int result;
 	ssize_t new_length;
 
 	new_length = get_line_length(*line);
@@ -18,7 +18,6 @@ void split_line(char **line, ssize_t read)
 	new_line = malloc(new_length + 1);
 	if (!new_line)
 		return;
-	j = 0;
 	old_line = *line;
 	for (i = 0; old_line[i]; i++)
 	{
@@ -26,64 +25,19 @@ void split_line(char **line, ssize_t read)
 		next = old_line[i + 1];
 		if (i != 0)
 		{
-			prev = old_line[i - 1];
-			if (current == ';')
-			{
-				if (next == ';' && prev != ' ' && prev != ';')
-				{
-					new_line[j++] = ' ';
-					new_line[j++] = ';';
-					continue;
-				}
-				else if (prev == ';' && next != ' ')
-				{
-					new_line[j++] = ';';
-					new_line[j++] = ' ';
-					continue;
-				}
-				if (prev != ' ')
-					new_line[j++] = ' ';
-				new_line[j++] = ';';
-				if (next != ' ')
-					new_line[j++] = ' ';
+			result = splitForOthers(i, j, prev, next, old_line, new_line);
+			if (result == 0)
 				continue;
-			}
-			else if (current == '&')
-			{
-				if (next == '&' && prev != ' ')
-					new_line[j++] = ' ';
-				else if (prev == '&' && next != ' ')
-				{
-					new_line[j++] = '&';
-					new_line[j++] = ' ';
-					continue;
-				}
-			}
-			else if (current == '|')
-			{
-				if (next == '|' && prev != ' ')
-					new_line[j++]  = ' ';
-				else if (prev == '|' && next != ' ')
-				{
-					new_line[j++] = '|';
-					new_line[j++] = ' ';
-					continue;
-				}
-			}
 		}
 		else if (current == ';')
 		{
-			if (i != 0 && old_line[i - 1] != ' ')
-				new_line[j++] = ' ';
-			new_line[j++] = ';';
-			if (next != ' ' && next != ';')
-				new_line[j++] = ' ';
-			continue;
+			result = split_other_column(i, j, next, new_line);
+			if (result == 0)
+				continue;
 		}
 		new_line[j++] = old_line[i];
 	}
 	new_line[j] = '\0';
-
 	free(*line);
 	*line = new_line;
 }
@@ -92,7 +46,6 @@ void split_line(char **line, ssize_t read)
  * get_line_length - gets new length of the splitted line
  * Return: new length of the line.
  */
-
 ssize_t get_line_length(char *line)
 {
 	size_t i;
