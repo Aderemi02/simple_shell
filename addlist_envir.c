@@ -109,7 +109,7 @@ char **gettingenvir(char *identity)
  */
 char **copyingenvir(void)
 {
-	int ind;
+	int ind = 0;
 	char **Nenvir;
 	size_t len = 0;
 
