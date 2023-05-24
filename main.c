@@ -10,7 +10,7 @@ int main(int ac, char *av[])
 	char *prompt = "cisfun$ ", *ln = "\n";
 	int rep = 0, reppin, *addrep = &reppin;
 
-	global_alias = NULL, global_history = 1;
+	global_alias = NULL, global_history = 1, source = av[0];
 	signal(SIGINT, signal_hand);
 	*addrep = 0;
 	environ = copyingenvir();

@@ -15,7 +15,7 @@ char *loc(char *comm)
 		return (NULL);
 
 	directs = get_direction(*find + 5);
-	head = get_direction(*find + 5);
+	head = directs;
 
 	while (directs)
 	{

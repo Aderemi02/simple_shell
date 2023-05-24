@@ -48,7 +48,7 @@ new_list *add_end_node(new_list **head, char *source)
 {
 	new_list *Nnode, *Lnode;
 
-	Nnode = malloc(sizeof(new_alias));
+	Nnode = malloc(sizeof(new_list));
 
 	if (!Nnode)
 		return (NULL);
