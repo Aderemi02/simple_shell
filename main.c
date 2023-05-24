@@ -10,17 +10,12 @@ int main(int ac, char *av[])
 	char *prompt = "cisfun$ ", *ln = "\n";
 	int rep = 0, reppin, *addrep = &reppin;
 
-	global_history = 1;
-	global_alias = NULL;
-	source = av[0];
+	global_alias = NULL, global_history = 1;
 	signal(SIGINT, signal_hand);
-
 	*addrep = 0;
 	environ = copyingenvir();
-
 	if (!environ)
 		exit(-20);
-
 	if (ac != 1)
 	{
 		rep = file_comm(av[1], addrep);
@@ -28,7 +23,6 @@ int main(int ac, char *av[])
 		free_al_lst(global_alias);
 		return (*addrep);
 	}
-
 	if (!isatty(STDIN_FILENO))
 	{
 		while (rep != -2 && rep != -3)
@@ -37,7 +31,6 @@ int main(int ac, char *av[])
 		free_al_lst(global_alias);
 		return (*addrep);
 	}
-
 	while (1)
 	{
 		write(STDOUT_FILENO, prompt, 8);

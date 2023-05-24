@@ -4,6 +4,7 @@
  * @p: pointer to former memory
  * @former: size of former memory
  * @nw: size of new memory
+ * Return: memory reallocated
  */
 void *reallocation(void *p, unsigned int former, unsigned int nw)
 {

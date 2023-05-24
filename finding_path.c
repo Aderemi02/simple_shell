@@ -84,7 +84,6 @@ char *fill_direction(char *find)
 	char *find_dup, *workdir;
 
 	workdir = *(gettingenvir("PWD")) + 4;
-
 	while (find[cnt])
 	{
 		if (find[cnt] == ':')
@@ -101,22 +100,18 @@ char *fill_direction(char *find)
 	find_dup = malloc(sizeof(char) * (len + 1));
 	if (!find_dup)
 		return (NULL);
-	find_dup[0] = '\0';
-	cnt = 0;
-
+	find_dup[0] = '\0', cnt = 0;
 	while (find[cnt])
 	{
 		if (find[cnt] == ':')
 		{
 			if (cnt == 0)
 			{
-				_strcat(find_dup, workdir);
-				_strcat(find_dup, ":");
+				_strcat(find_dup, workdir), _strcat(find_dup, ":");
 			}
 			else if (find[cnt + 1] == ':' || find[cnt + 1] == '\0')
 			{
-				_strcat(find_dup, ":");
-				_strcat(find_dup, workdir);
+				_strcat(find_dup, ":"), _strcat(find_dup, workdir);
 			}
 			else
 				_strcat(find_dup, ":");
@@ -124,8 +119,7 @@ char *fill_direction(char *find)
 		else
 			_strncat(find_dup, &find[cnt], 1);
 		cnt++;
-	}
-	return (find_dup);
+	} return (find_dup);
 }
 
 /**
