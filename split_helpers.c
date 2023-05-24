@@ -2,7 +2,6 @@
 
 /**
  * splitForOthers - splits a line column
- * @prev: prev char
  * @current: current char
  * @next: next char
  * @new_line: new_line
@@ -11,31 +10,38 @@
  * @j: input int
  * Return: result
  */
-int splitForOthers(size_t i, size_t j, char prev, char current, char next, char *old_line, char* new_line)
+int splitForOthers(size_t i, size_t j, char current,
+		char next, char *old_line, char *new_line)
 {
-    prev = old_line[i - 1];
+	char prev;
+
+	prev = old_line[i - 1];
 	if (current == ';')
 	{
-		return (split_column(i, j, prev, next, new_line));
+		return (split_column(j, prev, next, new_line));
 	}
 	else if (current == '&')
 	{
-		return (split_and(i, j, prev, next, new_line));
+		return (split_and(j, prev, next, new_line));
 	}
 	else if (current == '|')
 	{
-		return (split_pipe(i, j, prev, next, new_line));
+		return (split_pipe(j, prev, next, new_line));
 	}
+	return (1);
 }
+
 /**
  * split_other_column - splits a line column
  * @next: next char
  * @old_line: old line
+ * @new_line: new line
  * @i: input int
  * @j: input int
  * Return: result
  */
-int split_other_column(size_t i, size_t j, char next, char *old_line)
+int split_other_column(size_t i, size_t j, char next,
+		char *old_line, char *new_line)
 {
 	if (i != 0 && old_line[i - 1] != ' ')
 		new_line[j++] = ' ';
@@ -49,11 +55,10 @@ int split_other_column(size_t i, size_t j, char next, char *old_line)
  * @prev: prev char
  * @next: next char
  * @new_line: new line
- * @i: input int
  * @j: input int
  * Return: result
  */
-int split_pipe(size_t i, size_t j, char prev, char next, char *new_line)
+int split_pipe(size_t j, char prev, char next, char *new_line)
 {
 	if (next == '|' && prev != ' ')
 		new_line[j++]  = ' ';
@@ -70,11 +75,10 @@ int split_pipe(size_t i, size_t j, char prev, char next, char *new_line)
  * @prev: prev char
  * @next: next char
  * @new_line: new line
- * @i: input int
  * @j: input int
  * Return: result
  */
-int split_and(size_t i, size_t j, char prev, char next, char *new_line)
+int split_and(size_t j, char prev, char next, char *new_line)
 {
 	if (next == '&' && prev != ' ')
 		new_line[j++] = ' ';
@@ -91,11 +95,10 @@ int split_and(size_t i, size_t j, char prev, char next, char *new_line)
  * @prev: prev char
  * @next: next char
  * @new_line: new line
- * @i: input int
  * @j: input int
  * Return: result
  */
-int split_column(size_t i, size_t j, char prev, char next, char *new_line)
+int split_column(size_t j, char prev, char next, char *new_line)
 {
 	if (next == ';' && prev != ' ' && prev != ';')
 	{

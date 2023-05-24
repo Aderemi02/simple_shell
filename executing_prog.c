@@ -46,7 +46,7 @@ int exec(char **a1, char **beginning)
 	}
 	if (flag)
 		free(comm);
-		return (rep);
+	return (rep);
 }
 
 /**
@@ -54,7 +54,7 @@ int exec(char **a1, char **beginning)
  * @rep: input int representation
  * @comm: input char
  * @a1: input char
- * @beginning: starting of ther command 
+ * @beginning: starting of ther command
  * Return: 0 on success
  */
 void executeAndFree(int rep, char *comm, char **a1, char **beginning)
@@ -110,8 +110,7 @@ int unable(char *file)
 int file_comm(char *file, int *addrep)
 {
 	ssize_t fd, rd, i;
-	int rep;
-	char buff[120], *readline, **args, **beginning;
+	char buff[120], *readline;
 	unsigned int former = 120, new = 0;
 
 	global_history = 0;
@@ -124,7 +123,6 @@ int file_comm(char *file, int *addrep)
 	readline = malloc(sizeof(char) * former);
 	if (!readline)
 		return (-1);
-
 	while (rd)
 	{
 		rd = read(fd, buff, 119);
@@ -143,27 +141,26 @@ int file_comm(char *file, int *addrep)
 		if (readline[i] == '\n')
 		{
 			readline[i] = ';';
-
 			for (i += 1; i < new && readline[i] == '\n'; i++)
 				readline[i] = ' ';
 		}
 	}
-	splitCallAndFree(i, rep, readline, addrep, args, beginning);
-	return (rep);
+	return (splitCallAndFree(i, readline, addrep, new));
 }
 
 /**
  * splitCallAndFree - splits calls and free
  * @i: input int
- * @rep: input int representation
  * @readline: input line to read
  * @addrep: input used to add rep
- * @args: arguments passed
- * @beginning: starting of ther command 
+ * @new: input int
  * Return: 0 on success
  */
-void splitCallAndFree(ssize_t i, int rep, char *readline, int *addrep, char **args, char **beginning)
+int splitCallAndFree(ssize_t i, char *readline, int *addrep, unsigned int new)
 {
+	int rep;
+	char **args, **beginning;
+
 	replace_env(&readline, addrep);
 	split_line(&readline, new);
 	args = _strtok(readline, " ");
@@ -177,9 +174,7 @@ void splitCallAndFree(ssize_t i, int rep, char *readline, int *addrep, char **ar
 		return (*addrep);
 	}
 	beginning = args;
-
 	i = 0;
-
 	while (args[i])
 	{
 		if (_strncmp(args[i], ";", 1) == 0)
@@ -194,4 +189,5 @@ void splitCallAndFree(ssize_t i, int rep, char *readline, int *addrep, char **ar
 	}
 	rep = call_arguments(args, beginning, addrep);
 	free(beginning);
+	return (rep);
 }

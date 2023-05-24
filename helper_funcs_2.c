@@ -8,7 +8,7 @@
 
 void split_line(char **line, ssize_t read)
 {
-	char *old_line, *new_line, prev, current, next;
+	char *old_line, *new_line, current, next;
 	size_t i, j = 0;
 	int result;
 	ssize_t new_length;
@@ -26,13 +26,13 @@ void split_line(char **line, ssize_t read)
 		next = old_line[i + 1];
 		if (i != 0)
 		{
-			result = splitForOthers(i, j, prev, current, next, old_line, new_line);
+			result = splitForOthers(i, j, current, next, old_line, new_line);
 			if (result == 0)
 				continue;
 		}
 		else if (current == ';')
 		{
-			result = split_other_column(i, j, next, new_line);
+			result = split_other_column(i, j, next, old_line, new_line);
 			if (result == 0)
 				continue;
 		}
@@ -45,6 +45,7 @@ void split_line(char **line, ssize_t read)
 
 /**
  * get_line_length - gets new length of the splitted line
+ * @line: input line
  * Return: new length of the line.
  */
 
@@ -53,6 +54,7 @@ ssize_t get_line_length(char *line)
 	size_t i;
 	ssize_t new_length = 0;
 	char current, next;
+	int result;
 
 	for (i = 0; line[i]; i++)
 	{
@@ -70,7 +72,9 @@ ssize_t get_line_length(char *line)
 		{
 			if (current == ';')
 			{
-				incrementLength(i, new_length, next);
+				result = incrementLength(i, new_length, next, line);
+				if (result == 0)
+					continue;
 			}
 			else
 				check_operator(&line[i], &new_length);
@@ -92,24 +96,27 @@ ssize_t get_line_length(char *line)
  * @i: input int
  * @new_length: pointer to new_length function
  * @next: next char
+ * @line: line passed
+ * Return: 0 if continue else 1
  */
 
-void incrementLength(size_t i, ssize_t new_length, char next)
+int incrementLength(size_t i, ssize_t new_length, char next, char *line)
 {
 	if (next == ';' && line[i - 1] != ' ' && line[i - 1] != ';')
 	{
 		new_length += 2;
-		continue;
+		return (0);
 	}
 	else if (line[i - 1] == ';' && next != ' ')
 	{
 		new_length += 2;
-		continue;
+		return (0);
 	}
 	if (line[i - 1] != ' ')
 		new_length++;
 	if (next != ' ')
 		new_length++;
+	return (1);
 }
 
 /**
