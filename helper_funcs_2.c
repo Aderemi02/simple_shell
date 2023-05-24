@@ -49,8 +49,7 @@ void split_line(char **line, ssize_t read)
  */
 ssize_t get_line_length(char *line)
 {
-	size_t i;
-	ssize_t new_length = 0;
+	size_t i; ssize_t new_length = 0;
 	char current, next;
 
 	for (i = 0; line[i]; i++)
@@ -60,7 +59,8 @@ ssize_t get_line_length(char *line)
 		{
 			if (i == 0 || line[i - 1] == ' ')
 			{
-				line[i] = '\0', break;
+				line[i] = '\0';
+					break;
 			}
 		} else if (i != 0)
 		{
@@ -68,11 +68,12 @@ ssize_t get_line_length(char *line)
 			{
 				if (next == ';' && line[i - 1] != ' ' && line[i - 1] != ';')
 				{
-					new_length += 2, continue;
-				}
-				else if (line[i - 1] == ';' && next != ' ')
+					new_length += 2;
+					continue;
+				} else if (line[i - 1] == ';' && next != ' ')
 				{
-					new_length += 2, continue;
+					new_length += 2;
+					continue;
 				}
 				if (line[i - 1] != ' ')
 					new_length++;
@@ -80,8 +81,7 @@ ssize_t get_line_length(char *line)
 					new_length++;
 			} else
 				check_operator(&line[i], &new_length);
-		}
-		else if (current == ';')
+		} else if (current == ';')
 		{
 			if (i != 0 && line[i - 1] != ' ')
 				new_length++;
