@@ -109,7 +109,7 @@ char **gettingenvir(char *identity)
  */
 char **copyingenvir(void)
 {
-	int ind = 0;
+	int ind;
 	char **Nenvir;
 	size_t len = 0;
 
@@ -121,6 +121,7 @@ char **copyingenvir(void)
 	Nenvir = malloc(sizeof(char *) * (len + 1));
 	if (!Nenvir)
 		return (NULL);
+	ind = 0;
 
 	while (environ[ind])
 	{
