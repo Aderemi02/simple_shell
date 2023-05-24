@@ -1,6 +1,7 @@
 #include "shell.h"
+
 /**
- * exec - executing a command in child process
+ * exec - executing a commanf in child process
  * @a1: list of arguments
  * @beginning: pointer to beginning of argument
  * Return: rep on success
@@ -13,7 +14,8 @@ int exec(char **a1, char **beginning)
 
 	if (comm[0] != '/' && comm[0] != '.')
 	{
-		flag = 1, comm = loc(comm);
+		flag = 1;
+		comm = loc(comm);
 	}
 	if (!comm || (access(comm, F_OK) == -1))
 	{
@@ -34,23 +36,37 @@ int exec(char **a1, char **beginning)
 		}
 		if (sub_pid == 0)
 		{
-			execve(comm, a1, environ);
-			if (errno == EACCES)
-				rep = (create_error(a1, 126));
-			freeingenvir(), free_arguments(a1, beginning);
-			free_al_lst(global_alias);
-			exit(rep);
+			executeAndFree(rep, comm, a1, beginning);
 		}
 		else
 		{
-			wait(&init), rep = WEXITSTATUS(init);
+			wait(&init);
+			rep = WEXITSTATUS(init);
 		}
 	}
-		if (flag)
-			free(comm);
+	if (flag)
+		free(comm);
 		return (rep);
 }
 
+/**
+ * executeAndFree - execute and free
+ * @rep: input int representation
+ * @comm: input char
+ * @a1: input char
+ * @beginning: starting of ther command 
+ * Return: 0 on success
+ */
+void executeAndFree(int rep, char *comm, char **a1, char **beginning)
+{
+	execve(comm, a1, environ);
+	if (errno == EACCES)
+		rep = (create_error(a1, 126));
+	freeingenvir();
+	free_arguments(a1, beginning);
+	free_al_lst(global_alias);
+	exit(rep);
+}
 /**
  * unable - printing error if file doesnt exist or error
  * @file: path to the file to
@@ -132,6 +148,22 @@ int file_comm(char *file, int *addrep)
 				readline[i] = ' ';
 		}
 	}
+	splitCallAndFree(i, rep, readline, addrep, args, beginning);
+	return (rep);
+}
+
+/**
+ * splitCallAndFree - splits calls and free
+ * @i: input int
+ * @rep: input int representation
+ * @readline: input line to read
+ * @addrep: input used to add rep
+ * @args: arguments passed
+ * @beginning: starting of ther command 
+ * Return: 0 on success
+ */
+void splitCallAndFree(ssize_t i, int rep, char *readline, int *addrep, char **args, char **beginning)
+{
 	replace_env(&readline, addrep);
 	split_line(&readline, new);
 	args = _strtok(readline, " ");
@@ -162,5 +194,4 @@ int file_comm(char *file, int *addrep)
 	}
 	rep = call_arguments(args, beginning, addrep);
 	free(beginning);
-	return (rep);
 }

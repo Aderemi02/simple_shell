@@ -5,6 +5,7 @@
  * @line: A pointer to a line read from standard input.
  * @read: The length of line.
  */
+
 void split_line(char **line, ssize_t read)
 {
 	char *old_line, *new_line, prev, current, next;
@@ -25,7 +26,7 @@ void split_line(char **line, ssize_t read)
 		next = old_line[i + 1];
 		if (i != 0)
 		{
-			result = splitForOthers(i, j, prev, next, old_line, new_line);
+			result = splitForOthers(i, j, prev, current, next, old_line, new_line);
 			if (result == 0)
 				continue;
 		}
@@ -44,9 +45,9 @@ void split_line(char **line, ssize_t read)
 
 /**
  * get_line_length - gets new length of the splitted line
- * @line: the string to get its line
  * Return: new length of the line.
  */
+
 ssize_t get_line_length(char *line)
 {
 	size_t i;
@@ -55,47 +56,68 @@ ssize_t get_line_length(char *line)
 
 	for (i = 0; line[i]; i++)
 	{
-		current = line[i], next = line[i + 1];
+		current = line[i];
+		next = line[i + 1];
 		if (current == '#')
 		{
 			if (i == 0 || line[i - 1] == ' ')
 			{
 				line[i] = '\0';
-					break;
+				break;
 			}
-		} else if (i != 0)
+		}
+		else if (i != 0)
 		{
 			if (current == ';')
 			{
-				if (next == ';' && line[i - 1] != ' ' && line[i - 1] != ';')
-				{
-					new_length += 2;
-					continue;
-				} else if (line[i - 1] == ';' && next != ' ')
-				{
-					new_length += 2;
-					continue;
-				}
-				if (line[i - 1] != ' ')
-					new_length++;
-				if (next != ' ')
-					new_length++;
-			} else
+				incrementLength(i, new_length, next);
+			}
+			else
 				check_operator(&line[i], &new_length);
-		} else if (current == ';')
+		}
+		else if (current == ';')
 		{
 			if (i != 0 && line[i - 1] != ' ')
 				new_length++;
 			if (next != ' ' && next != ';')
 				new_length++;
-		} new_length++;
-	} return (new_length);
+		}
+		new_length++;
+	}
+	return (new_length);
 }
+
+/**
+ * incrementLength - use to set a condition to increment the lenght
+ * @i: input int
+ * @new_length: pointer to new_length function
+ * @next: next char
+ */
+
+void incrementLength(size_t i, ssize_t new_length, char next)
+{
+	if (next == ';' && line[i - 1] != ' ' && line[i - 1] != ';')
+	{
+		new_length += 2;
+		continue;
+	}
+	else if (line[i - 1] == ';' && next != ' ')
+	{
+		new_length += 2;
+		continue;
+	}
+	if (line[i - 1] != ' ')
+		new_length++;
+	if (next != ' ')
+		new_length++;
+}
+
 /**
  * check_operator - checks a line for logical operators like "||" or "&&".
  * @line: A pointer to the character to check in the line.
  * @new_length: Pointer to new_length in get_line_length function.
  */
+
 void check_operator(char *line, ssize_t *new_length)
 {
 	char prev, current, next;

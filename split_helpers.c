@@ -1,6 +1,9 @@
+#include "shell.h"
 
 /**
  * splitForOthers - splits a line column
+ * @prev: prev char
+ * @current: current char
  * @next: next char
  * @new_line: new_line
  * @old_line: old line
@@ -8,7 +11,7 @@
  * @j: input int
  * Return: result
  */
-int splitForOthers(size_t i, size_t j, char next, char *old_line, char* new_line)
+int splitForOthers(size_t i, size_t j, char prev, char current, char next, char *old_line, char* new_line)
 {
     prev = old_line[i - 1];
 	if (current == ';')

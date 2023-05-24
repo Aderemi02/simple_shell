@@ -73,8 +73,7 @@ int builtin_exit(char **args, char **beginning)
  */
 int builtin_cd(char **args, char __attribute__((__unused__)) **beginning)
 {
-	char **directory_details, *new_line = "\n";
-	char *old_pwd = NULL, *pwd = NULL;
+	char **directory_details, *new_line = "\n", *old_pwd = NULL, *pwd = NULL;
 	struct stat source;
 
 	old_pwd = getcwd(old_pwd, 0);
@@ -114,11 +113,23 @@ int builtin_cd(char **args, char __attribute__((__unused__)) **beginning)
 		if (gettingenvir("HOME") != NULL)
 			chdir(*(gettingenvir("HOME")) + 5);
 	}
-
+	return (changeDirectoryAndFree(args, pwd, old_pwd, directory_details));
+}
+/**
+ * changeDirectoryAndFree - used to change the current directory
+ * @args: arguments array
+ * @pwd: pointer to the beginning of the arguments
+ * @old_pwd: pointer to the beginning of the arguments
+ * @directory_details: pointer to the beginning of the arguments
+ * Return: 2 if not a directory, -1 if contains error otherwise 0
+ */
+int changeDirectoryAndFree(char **args, char *pwd, char *old_pwd = NULL, char **directory_details)
+{
+	char *new_line = "\n";
+	
 	pwd = getcwd(pwd, 0);
 	if (!pwd)
 		return (-1);
-
 	directory_details = malloc(sizeof(char *) * 2);
 	if (!directory_details)
 		return (-1);
@@ -127,7 +138,6 @@ int builtin_cd(char **args, char __attribute__((__unused__)) **beginning)
 	directory_details[1] = old_pwd;
 	if (builtin_setenv(directory_details, directory_details) == -1)
 		return (-1);
-
 	directory_details[0] = "PWD";
 	directory_details[1] = pwd;
 	if (builtin_setenv(directory_details, directory_details) == -1)

@@ -80,7 +80,7 @@ char *fill_direction(char *find);
 new_list *get_direction(char *find);
 char *loc(char *comm);
 void signal_hand(int input_signal);
-
+void splitCallAndFree(ssize_t i, int rep, char *readline, int *addrep, char **args, char **beginning);
 
 /********Tokenizing Functions*********/
 int counting_token(char *s1, char *delimit);
@@ -110,6 +110,7 @@ int builtin_unsetenv(char **args, char __attribute__((__unused__)) **beginning);
 int (*get_builtin_func(char *command))(char **args, char **beginning);
 int builtin_exit(char **args, char **beginning);
 int builtin_cd(char **args, char __attribute__((__unused__)) **beginning);
+int changeDirectoryAndFree(char **args, char *pwd, char *old_pwd = NULL, char **directory_details);
 
 /********Helper Functions*************/
 void free_arguments(char **args, char **beginning);
@@ -120,7 +121,12 @@ void replace_env(char **args, int *last_command);
 void split_line(char **line, ssize_t read);
 ssize_t get_line_length(char *line);
 void check_operator(char *line, ssize_t *new_length);
-
+int split_other_column(size_t i, size_t j, char next, char *old_line);
+int split_pipe(size_t i, size_t j, char prev, char next, char *new_line);
+int split_and(size_t i, size_t j, char prev, char next, char *new_line);
+int split_column(size_t i, size_t j, char prev, char next, char *new_line);
+int splitForOthers(size_t i, size_t j, char prev, char current, char next, char *old_line, char* new_line);
+void incrementLength(size_t i, ssize_t new_length, char next);
 
 char *get_arguments(char *line, int *last_command);
 int check_arguments(char **args);
